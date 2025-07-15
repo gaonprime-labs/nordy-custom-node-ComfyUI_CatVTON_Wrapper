@@ -34,7 +34,7 @@ class CatVTONPipeline:
         weight_dtype=torch.float32,
         device='cuda',
         compile=False,
-        use_tf32=True,
+        use_tf32=False,
     ):
         self.device = device
         self.weight_dtype = weight_dtype
@@ -50,9 +50,9 @@ class CatVTONPipeline:
             self.vae = torch.compile(self.vae, mode="reduce-overhead")
             
         # Enable TF32 for faster training on Ampere GPUs (A100 and RTX 30 series).
-        if use_tf32:
-            torch.set_float32_matmul_precision("high")
-            torch.backends.cuda.matmul.allow_tf32 = True
+        # if use_tf32:
+        #     torch.set_float32_matmul_precision("high")
+        #     torch.backends.cuda.matmul.allow_tf32 = True
 
     def auto_attn_ckpt_load(self, attn_ckpt, version):
         sub_folder = {
